@@ -1,4 +1,6 @@
+# XGBoost Boosted Decision Tree Classifier: Calculate Standard Error of Model
 # Author: Louis Heery
+
 import pandas
 import numpy
 import sys
@@ -28,10 +30,10 @@ from scipy import stats
 
 
 def totalSensitivity(A,B,errorA,errorB):
-    totalSensitivitB = np.sqrt(A**2 + B**2)
+    totalSensitivity = np.sqrt(A**2 + B**2)
     totalError = np.sqrt(((A*errorA)/np.sqrt(A**2 + B**2))**2 + ((B*errorB)/np.sqrt(A**2 + B**2))**2)
 
-    return (totalSensitivitB,totalError)
+    return (totalSensitivity,totalError)
 
 start = time.time()
 
@@ -48,43 +50,44 @@ for i in range (0,numberOfIterations):
         # Defining BDT Parameters
         if nJets == 2:
             variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR',]
-            n_estimators = 200 # 150
-            max_depth = 4 # 6
-            learning_rate = 0.15 # 0.05
+            nEstimators = 200 # 150
+            maxDepth = 4 # 6
+            learningRate = 0.15 # 0.05
             subsample = 0.5 # 0.1
 
         else:
             variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR',]
-            n_estimators = 200 # 150
-            max_depth = 4 # 6
-            learning_rate = 0.15 # 0.05
+            nEstimators = 200 # 150
+            maxDepth = 4 # 6
+            learningRate = 0.15 # 0.05
             subsample = 0.5 # 0.1
 
         # Reading Data
         if nJets == 2:
-            df_k1_2 = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-            df_k2_2 = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+            dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
+            dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
 
         else:
-            df_k1_2 = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-            df_k2_2 = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+            dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
+            dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
 
         # Randomly select 90% of dataset
-        df_k1_2_90percent = df_k1_2.sample(frac=0.9)
-        df_k2_2_90percent = df_k2_2.sample(frac=0.9)
+        dfEven90percent = dfEven.sample(frac=0.9)
+        dfOdd90percent = dfOdd.sample(frac=0.9)
 
         # Initialising BDTs
-        xgb_even = XGBClassifier(n_estimators=n_estimators,max_depth=max_depth,learning_rate=learning_rate,subsample=subsample)
-        xgb_odd = XGBClassifier(n_estimators=n_estimators,max_depth=max_depth,learning_rate=learning_rate,subsample=subsample)
+        xgbEven = XGBClassifier(nEstimators=nEstimators,maxDepth=maxDepth,learningRate=learningRate,subsample=subsample)
+        xgbOdd = XGBClassifier(nEstimators=nEstimators,maxDepth=maxDepth,learningRate=learningRate,subsample=subsample)
 
-        # Training using threads
-        def train_even():
-            xgb_even.fit(df_k1_2_90percent[variables], df_k1_2_90percent['Class'], sample_weight=df_k1_2_90percent['training_weight'])
-        def train_odd():
-            xgb_odd.fit(df_k2_2_90percent[variables], df_k2_2_90percent['Class'], sample_weight=df_k2_2_90percent['training_weight'])
+        # Multi-thread BDT Training
+        def trainEven():
+            xgbEven.fit(dfEven90percent[variables], dfEven90percent['Class'], sample_weight=dfEven90percent['training_weight'])
+        def trainOdd():
+            xgbOdd.fit(dfOdd90percent[variables], dfOdd90percent['Class'], sample_weight=dfOdd90percent['training_weight'])
 
-        t = threading.Thread(target=train_even)
-        t2 = threading.Thread(target=train_odd)
+        # Specify multiple threaded BDT Training
+        t = threading.Thread(target=trainEven)
+        t2 = threading.Thread(target=trainOdd)
 
         t.start()
         t2.start()
@@ -92,32 +95,32 @@ for i in range (0,numberOfIterations):
         t2.join()
 
         # Scoring
-        scores_even = xgb_odd.predict_proba(df_k1_2[variables])[:,1]
-        scores_odd = xgb_even.predict_proba(df_k2_2[variables])[:,1]
+        scoresEven = xgbOdd.predict_proba(dfEven[variables])[:,1]
+        scoresOdd = xgbEven.predict_proba(dfOdd[variables])[:,1]
 
-        df_k1_2['decision_value'] = ((scores_even-0.5)*2)
-        df_k2_2['decision_value'] = ((scores_odd-0.5)*2)
-        df = pd.concat([df_k1_2,df_k2_2])
+        dfEven['decision_value'] = ((scoresEven-0.5)*2)
+        dfOdd['decision_value'] = ((scores_odd-0.5)*2)
+        df = pd.concat([dfEven,dfOdd])
 
         # Calculating Sensitivity
         if nJets == 2:
-            result_2 = calc_sensitivity_with_error(df)
-            dataset[i,0] = result_2[0]
-            dataset[i,1] = result_2[1]
-            print(str(nJets) + " Jet using the Standard BDT: "+ str(result_2[0]) + " ± "+ str(result_2[1]))
+            sensitivity2Jet = calc_sensitivity_with_error(df)
+            dataset[i,0] = sensitivity2Jet[0]
+            dataset[i,1] = sensitivity2Jet[1]
+            print(str(nJets) + " Jet using the Standard BDT: "+ str(sensitivity2Jet[0]) + " ± "+ str(sensitivity2Jet[1]))
 
         else:
-            result_3 = calc_sensitivity_with_error(df)
-            dataset[i,2] = result_3[0]
-            dataset[i,3] = result_3[1]
-            print(str(nJets) + " Jet using the Standard BDT: "+ str(result_3[0]) + " ± "+ str(result_3[1]))
+            sensitivity3Jet = calc_sensitivity_with_error(df)
+            dataset[i,2] = sensitivity3Jet[0]
+            dataset[i,3] = sensitivity3Jet[1]
+            print(str(nJets) + " Jet using the Standard BDT: "+ str(sensitivity3Jet[0]) + " ± "+ str(sensitivity3Jet[1]))
 
-    final_combined = totalSensitivity(result_2[0],result_3[0],result_2[1],result_3[1])
-    dataset[i,4] = final_combined[0] #combined
-    dataset[i,5] = final_combined[1] #combined Uncertainty
-    dataset[i,6] = time.time() - start
+    sensitivityCombined = totalSensitivity(sensitivity2Jet[0],sensitivity3Jet[0],sensitivity2Jet[1],sensitivity3Jet[1])
+    dataset[i,4] = sensitivityCombined[0] # combined
+    dataset[i,5] = sensitivityCombined[1] # combined Uncertainty
+    dataset[i,6] = time.time() - start # time taken
 
-    print("Combined Sensitivity", final_combined[0], "±", final_combined[1])
+    print("Combined Sensitivity", sensitivityCombined[0], "±", sensitivityCombined[1])
 
 print("Total Time Taken", time.time() - start)
 
@@ -152,10 +155,10 @@ for i in graphs:
     plt.ylim(0,18)
     plt.title(i + "   (" + r'$\mu = $' + str(round(m, 3)) + ", "+ r'$ \sigma = $' + str(round(s,3)) + ")")
     plt.grid(axis='y', alpha=0.75)
-    #plt.text((xmin + xmax)/2, 0, r'$\mu = $' + str(round(m, 3)) + '\n' + r'$ \sigma = $' + str(round(s,3)))
 
-    name = i.replace(" ", "_")
+    name = i.replace(" ", "_") # Add underscores for file name
 
+    # Save final figure to pdf file
     figureName = "XGBoost_500Iterations_" + str(name) + ".pdf"
     fig = plt.gcf()
     plt.savefig(figureName, bbox_inches='tight',dpi=300)

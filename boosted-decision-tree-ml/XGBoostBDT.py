@@ -20,10 +20,10 @@ import time
 import threading
 
 def totalSensitivity(A,B,errorA,errorB):
-    totalSensitivitB = np.sqrt(A**2 + B**2)
+    totalSensitivity = np.sqrt(A**2 + B**2)
     totalError = np.sqrt(((A*errorA)/np.sqrt(A**2 + B**2))**2 + ((B*errorB)/np.sqrt(A**2 + B**2))**2)
 
-    return (totalSensitivitB,totalError)
+    return (totalSensitivity,totalError)
 
 start = time.time()
 
@@ -36,35 +36,35 @@ for nJets in [2,3]:
 
         variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR',]
 
-        n_estimators = 200 # 150
-        max_depth = 4 # 6
-        learning_rate = 0.15 # 0.05
-        subsample = 0.5 # 0.1
+        n_estimators = 200
+        max_depth = 4
+        learning_rate = 0.15
+        subsample = 0.5
 
     else:
 
         variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR',]
 
-        n_estimators = 200 # 150
-        max_depth = 4 # 6
-        learning_rate = 0.15 # 0.05
-        subsample = 0.5 # 0.1
+        n_estimators = 200
+        max_depth = 4
+        learning_rate = 0.15
+        subsample = 0.5
 
     # Reading Data
     if nJets == 2:
-        df_k1_2 = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-        df_k2_2 = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+        dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
+        dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
 
     else:
-        df_k1_2 = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-        df_k2_2 = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+        dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
+        dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
 
 
-    xgb_even = XGBClassifier(n_estimators=n_estimators,
+    xgbEven = XGBClassifier(n_estimators=n_estimators,
                              max_depth=max_depth,
                              learning_rate=learning_rate,
                              subsample=subsample)
-    xgb_odd = XGBClassifier(n_estimators=n_estimators,
+    xgbOdd = XGBClassifier(n_estimators=n_estimators,
                              max_depth=max_depth,
                              learning_rate=learning_rate,
                              subsample=subsample)
@@ -72,37 +72,37 @@ for nJets in [2,3]:
 
 
     print("Training the " + str(nJets) + " Jet Dataset")
-    xgb_even.fit(df_k1_2[variables], df_k1_2['Class'], sample_weight=df_k1_2['training_weight'])
+    xgbEven.fit(dfEven[variables], dfEven['Class'], sample_weight=dfEven['training_weight'])
 
-    xgb_odd.fit(df_k2_2[variables], df_k2_2['Class'], sample_weight=df_k2_2['training_weight'])
+    xgbOdd.fit(dfOdd[variables], dfOdd['Class'], sample_weight=dfOdd['training_weight'])
 
+    # Calculate Score of Trained BDT
+    scoresEven = xgbOdd.predict_proba(dfEven[variables])[:,1]
+    scoresOdd = xgbEven.predict_proba(dfOdd[variables])[:,1]
 
-    scores_even = xgb_odd.predict_proba(df_k1_2[variables])[:,1]
-    scores_odd = xgb_even.predict_proba(df_k2_2[variables])[:,1]
-
-    df_k1_2['decision_value'] = ((scores_even-0.5)*2)
-    df_k2_2['decision_value'] = ((scores_odd-0.5)*2)
-    df = pd.concat([df_k1_2,df_k2_2])
+    dfEven['decision_value'] = ((scoresEven-0.5)*2)
+    dfOdd['decision_value'] = ((scoresOdd-0.5)*2)
+    df = pd.concat([dfEven,dfOdd])
     figureName = "XGBoost_" + str(nJets) + "Jets_" + str(n_estimators) + "estimators_" + str(max_depth) + "depth_" + str(learning_rate) + "learnrate.pdf"
 
     h1, ax = final_decision_plot(df, figureName)
 
 
     if nJets == 2:
-        result_2 = calc_sensitivity_with_error(df)
-        print(str(nJets) + " Jet using the Standard BDT: "+ str(result_2[0]) + " ± "+ str(result_2[1]))
+        sensitivity2Jet = calc_sensitivity_with_error(df)
+        print(str(nJets) + " Jet using the Standard BDT: "+ str(sensitivity2Jet[0]) + " ± "+ str(sensitivity2Jet[1]))
 
     else:
-        result_3 = calc_sensitivity_with_error(df)
+        sensitivity3Jet = calc_sensitivity_with_error(df)
         h1.set_size_inches(8.5*1.2,7*1.2)
         display(h1)
-        print(str(nJets) + " Jet using the Standard BDT: "+ str(result_3[0]) + " ± "+ str(result_3[1]))
+        print(str(nJets) + " Jet using the Standard BDT: "+ str(sensitivity3Jet[0]) + " ± "+ str(sensitivity3Jet[1]))
 
 
 
-final_combined = totalSensitivity(result_2[0],result_3[0],result_2[1],result_3[1])
+sensitivityCombined = totalSensitivity(sensitivity2Jet[0],sensitivity3Jet[0],sensitivity2Jet[1],sensitivity3Jet[1])
 
-print("Combined Sensitivity", final_combined[0], "±",final_combined[1])
+print("Combined Sensitivity", sensitivityCombined[0], "±",sensitivityCombined[1])
 print("Time Taken", time.time() - start)
 print("FINISHED")
 print("************")
