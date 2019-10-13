@@ -17,12 +17,12 @@ for i in categories:
     for nJets in [2,3]:
 
         if nJets == 2:
-            dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
-            dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
+            dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_odd.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
+            dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_even.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
 
         else:
-            dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
-            dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
+            dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
+            dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv', usecols=(6,8,9,11,12,13,14,15,16,17,20,21,22,23,24,25,26,29))
 
 
         dfOddParticularEventType = dfOdd.loc[dfOdd['category'] == i]

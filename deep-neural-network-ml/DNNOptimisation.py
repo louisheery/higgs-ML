@@ -18,7 +18,7 @@ from time import time
 import seaborn as sns
 
 import sys
-sys.path.append("../")
+sys.path.append("../dataset-and-plotting")
 from nnPlotting import *
 
 
@@ -78,12 +78,12 @@ for hyperparameterOneValue in hyperparameterOne:
 
             # Reading Data
             if nJets == 2:
-                dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-                dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+                dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_even.csv')
+                dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_odd.csv')
 
             else:
-                dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-                dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+                dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv')
+                dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
             # Even events
             xEven = scale(dfEven[variables].to_numpy())

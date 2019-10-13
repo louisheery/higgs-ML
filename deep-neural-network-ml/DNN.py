@@ -12,7 +12,7 @@ from keras import backend as K
 import time
 
 import sys
-sys.path.append("../")
+sys.path.append("../dataset-and-plotting")
 from nnPlotting import *
 
 def totalSensitivity(A,B,errorA,errorB):
@@ -36,12 +36,12 @@ for nJets in [2,3]:
 
     # Read in Data
     if nJets == 2:
-        dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-        dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+        dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_even.csv')
+        dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_odd.csv')
 
     else:
-        dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-        dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+        dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv')
+        dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
     # Process Even Events
     xEven = scale(dfEven[variables].to_numpy())

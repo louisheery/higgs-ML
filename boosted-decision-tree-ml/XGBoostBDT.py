@@ -1,10 +1,11 @@
+# XGBoost Boosted Decision Tree Classifier
 # Author: Louis Heery
 
 import pandas
 import numpy
 import sys
 sys.path.append("../")
-sys.path.append("../plotting/")
+sys.path.append("../dataset-and-plotting")
 import pickle
 
 import matplotlib.cm as cm
@@ -52,12 +53,12 @@ for nJets in [2,3]:
 
     # Reading Data
     if nJets == 2:
-        dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-        dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+        dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_even.csv')
+        dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_odd.csv')
 
     else:
-        dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-        dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+        dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv')
+        dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
 
     xgbEven = XGBClassifier(n_estimators=n_estimators,
@@ -94,11 +95,7 @@ for nJets in [2,3]:
 
     else:
         sensitivity3Jet = calc_sensitivity_with_error(df)
-        h1.set_size_inches(8.5*1.2,7*1.2)
-        display(h1)
         print(str(nJets) + " Jet using the Standard BDT: "+ str(sensitivity3Jet[0]) + " ± "+ str(sensitivity3Jet[1]))
-
-
 
 sensitivityCombined = totalSensitivity(sensitivity2Jet[0],sensitivity3Jet[0],sensitivity2Jet[1],sensitivity3Jet[1])
 

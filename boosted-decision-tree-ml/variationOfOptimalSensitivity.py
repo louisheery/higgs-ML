@@ -1,9 +1,11 @@
+# XGBoost Boosted Decision Tree Classifier Input Variable Optimisation
 # Author: Louis Heery
+
 import pandas
 import numpy
 import sys
 sys.path.append("../")
-sys.path.append("../plotting/")
+sys.path.append("../dataset-and-plotting")
 import pickle
 
 import matplotlib.cm as cm
@@ -63,12 +65,12 @@ for i in range(0, len(variables3JetAll)):
 
         # Reading Data
         if nJets == 2:
-            dfEven = pd.read_csv('../CSV/VHbb_data_2jet_even.csv')
-            dfOdd = pd.read_csv('../CSV/VHbb_data_2jet_odd.csv')
+            dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_even.csv')
+            dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_2jet_odd.csv')
 
         else:
-            dfEven = pd.read_csv('../CSV/VHbb_data_3jet_even.csv')
-            dfOdd = pd.read_csv('../CSV/VHbb_data_3jet_odd.csv')
+            dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv')
+            dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
         xgbEven = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
         xgbOdd = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
