@@ -50,16 +50,16 @@ for i in range (0,numberOfIterations):
         # Defining BDT Parameters
         if nJets == 2:
             variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR',]
-            nEstimators = 200 # 150
-            maxDepth = 4 # 6
-            learningRate = 0.15 # 0.05
+            n_estimators = 200 # 150
+            max_depth = 4 # 6
+            learning_rate = 0.15 # 0.05
             subsample = 0.5 # 0.1
 
         else:
             variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR',]
-            nEstimators = 200 # 150
-            maxDepth = 4 # 6
-            learningRate = 0.15 # 0.05
+            n_estimators = 200 # 150
+            max_depth = 4 # 6
+            learning_rate = 0.15 # 0.05
             subsample = 0.5 # 0.1
 
         # Reading Data
@@ -76,8 +76,8 @@ for i in range (0,numberOfIterations):
         dfOdd90percent = dfOdd.sample(frac=0.9)
 
         # Initialising BDTs
-        xgbEven = XGBClassifier(nEstimators=nEstimators,maxDepth=maxDepth,learningRate=learningRate,subsample=subsample)
-        xgbOdd = XGBClassifier(nEstimators=nEstimators,maxDepth=maxDepth,learningRate=learningRate,subsample=subsample)
+        xgbEven = XGBClassifier(n_estimators=n_estimators,max_depth=max_depth,learning_rate=learning_rate,subsample=subsample)
+        xgbOdd = XGBClassifier(n_estimators=n_estimators,max_depth=max_depth,learning_rate=learning_rate,subsample=subsample)
 
         # Multi-thread BDT Training
         def trainEven():

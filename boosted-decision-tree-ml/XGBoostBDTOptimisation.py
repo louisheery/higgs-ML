@@ -2,8 +2,8 @@
 # Author: Louis Heery
 
 # How to Use:
-# 1. [LINE 58] Replace 'hyperparameterOne = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
-# 2. [LINE 59] Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
+# 1. [LINE 58] Replace 'hyperparameterOne = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
+# 2. [LINE 59] Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
 # 3. [LINE 84-87] Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
 # 4. [LINE 91-94] Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
 
@@ -50,13 +50,13 @@ def convertForMatrix(dataset, xVariableLength, yVariableLength):
 
     return convertedDataset
 
-maxDepth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-nEstimators = [1, 5, 20, 50, 100, 250, 500]
-learningRate = [0.05, 0.1, 0.25, 0.5, 0.75, 1.0]
+max_depth = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+n_estimators = [1, 5, 20, 50, 100, 250, 500]
+learning_rate = [0.05, 0.1, 0.25, 0.5, 0.75, 1.0]
 sampleSize = [0.001, 0.01, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0]
 
-hyperparameterOne = maxDepth
-hyperparameterTwo = nEstimators
+hyperparameterOne = max_depth
+hyperparameterTwo = n_estimators
 
 hyperparameterOneName = "MaxDepth"
 hyperparameterTwoName = "Number of Estimators"
@@ -81,16 +81,16 @@ for hyperparameterOneValue in hyperparameterOne:
             # Defining BDT Parameters
             if nJets == 2:
                 variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR',]
-                nEstimators = hyperparameterTwoValue # Default = 200
-                maxDepth = hyperparameterOneValue # Default = 4
-                learningRate = 0.15 # Default = 0.15
+                n_estimators = hyperparameterTwoValue # Default = 200
+                max_depth = hyperparameterOneValue # Default = 4
+                learning_rate = 0.15 # Default = 0.15
                 subsample = 0.5 # Default = 0.5
 
             else:
                 variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR',]
-                nEstimators = hyperparameterTwoValue # Default = 200
-                maxDepth = hyperparameterOneValue # Default = 4
-                learningRate = 0.15 # Default = 0.15
+                n_estimators = hyperparameterTwoValue # Default = 200
+                max_depth = hyperparameterOneValue # Default = 4
+                learning_rate = 0.15 # Default = 0.15
                 subsample = 0.5 # Default = 0.5
 
             # Reading Data
@@ -103,8 +103,8 @@ for hyperparameterOneValue in hyperparameterOne:
                 dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
             # Initialising BDTs
-            xgbEven = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
-            xgbOdd = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
+            xgbEven = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, subsample=subsample)
+            xgbOdd = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, subsample=subsample)
 
             # Setup multiple thread training of BDT
             def train_even():

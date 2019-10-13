@@ -38,16 +38,16 @@ for nJets in [2,3]:
     if nJets == 2:
 
         variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR',]
-        nEstimators = 200
-        maxDepth = 4
+        n_estimators = 200
+        max_depth = 4
         learningRate = 0.15
 
     else:
 
         variables_3 = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR',]
 
-        nEstimators = 300
-        maxDepth = 4
+        n_estimators = 300
+        max_depth = 4
         learningRate = 0.15
 
     # Reading Data
@@ -61,8 +61,8 @@ for nJets in [2,3]:
 
 
     # Initialising Classifier
-    bdtEven = RandomForestClassifier(nEstimators=nEstimators, maxDepth=maxDepth, min_samples_leaf=0.01)
-    bdtOdd = RandomForestClassifier(nEstimators=nEstimators, maxDepth=maxDepth, min_samples_leaf=0.01)
+    bdtEven = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_leaf=0.01)
+    bdtOdd = RandomForestClassifier(n_estimators=n_estimators, max_depth=max_depth, min_samples_leaf=0.01)
 
     # Training BDT
     print("Training the " + str(nJets) + " Jet Dataset")
@@ -75,7 +75,7 @@ for nJets in [2,3]:
     dfOdd['decision_value'] = bdtEven.predict_proba(dfOdd[variables])[:,1]
 
     df = pd.concat([dfEven,dfOdd])
-    figureName = "RandomForest_" + str(nJets) + "Jets_" + str(nEstimators) + "estimators_" + str(maxDepth) + "depth_" + str(learningRate) + "learnrate.pdf"
+    figureName = "RandomForest_" + str(nJets) + "Jets_" + str(n_estimators) + "estimators_" + str(max_depth) + "depth_" + str(learningRate) + "learnrate.pdf"
 
     h1, ax = final_decision_plot(df, figureName)
 

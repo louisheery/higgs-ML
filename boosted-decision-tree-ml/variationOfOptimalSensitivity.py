@@ -51,15 +51,15 @@ for i in range(0, len(variables3JetAll)):
         print("STARTED " + str(nJets) + " Jets with " + str(i) + " Variable Removed")
         if nJets == 2:
             variables = variables_2
-            nEstimators = 200
-            maxDepth = 14
+            n_estimators = 200
+            max_depth = 14
             learningRate = 0.15
             subsample = 0.5
 
         else:
             variables = variables_3
-            nEstimators = 200
-            maxDepth = 14
+            n_estimators = 200
+            max_depth = 14
             learningRate = 0.15
             subsample = 0.5
 
@@ -72,8 +72,8 @@ for i in range(0, len(variables3JetAll)):
             dfEven = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_even.csv')
             dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
-        xgbEven = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
-        xgbOdd = XGBClassifier(nEstimators=nEstimators, maxDepth=maxDepth, learningRate=learningRate, subsample=subsample)
+        xgbEven = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learningRate=learningRate, subsample=subsample)
+        xgbOdd = XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learningRate=learningRate, subsample=subsample)
 
         xgbEven.fit(dfEven[variables], dfEven['Class'], sample_weight=dfEven['training_weight'])
         xgbOdd.fit(dfOdd[variables], dfOdd['Class'], sample_weight=dfOdd['training_weight'])

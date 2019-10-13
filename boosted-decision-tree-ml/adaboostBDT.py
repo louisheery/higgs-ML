@@ -38,15 +38,15 @@ for nJets in [2,3]:
     # Defining BDT Parameters and Input Variables
     if nJets == 2:
         variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'MV1cB1_cont', 'MV1cB2_cont', 'nTrackJetsOR']
-        nEstimators = 50
-        maxDepth = 4
-        learningRate = 0.15
+        n_estimators = 50
+        max_depth = 4
+        learning_rate = 0.15
 
     else:
         variables = ['mBB', 'dRBB', 'pTB1', 'pTB2', 'MET', 'dPhiVBB', 'dPhiLBmin', 'Mtop', 'dYWH', 'mTW', 'pTV', 'mBBJ', 'pTJ3', 'MV1cB1_cont', 'MV1cB2_cont', 'MV1cJ3_cont','nTrackJetsOR']
-        nEstimators = 50
-        maxDepth = 4
-        learningRate = 0.15
+        n_estimators = 50
+        max_depth = 4
+        learning_rate = 0.15
 
     # Reading Data
     if nJets == 2:
@@ -58,9 +58,9 @@ for nJets in [2,3]:
         dfOdd = pd.read_csv('../dataset-and-plotting/CSV/VHbb_data_3jet_odd.csv')
 
     # Initialising Classifier
-    bdtEven = AdaBoostClassifier(DecisionTreeClassifier(maxDepth=maxDepth, min_samples_leaf=0.01), learningRate=learningRate, algorithm="SAMME", nEstimators=nEstimators)
+    bdtEven = AdaBoostClassifier(DecisionTreeClassifier(max_depth=max_depth, min_samples_leaf=0.01), learning_rate=learning_rate, algorithm="SAMME", n_estimators=n_estimators)
 
-    bdtOdd = AdaBoostClassifier(DecisionTreeClassifier(maxDepth=maxDepth, min_samples_leaf=0.01), learningRate=0.15, algorithm="SAMME", nEstimators=nEstimators)
+    bdtOdd = AdaBoostClassifier(DecisionTreeClassifier(max_depth=max_depth, min_samples_leaf=0.01), learning_rate=0.15, algorithm="SAMME", n_estimators=n_estimators)
 
     # Training BDT
     print("Training the " + str(nJets) + " Jet Dataset")
@@ -73,7 +73,7 @@ for nJets in [2,3]:
 
     df = pd.concat([dfEven,dfOdd])
 
-    figureName = "AdaBoost_" + str(nJets) + "Jets_" + str(nEstimators) + "estimators_" + str(maxDepth) + "depth_" + str(learningRate) + "learnrate.pdf"
+    figureName = "AdaBoost_" + str(nJets) + "Jets_" + str(n_estimators) + "estimators_" + str(max_depth) + "depth_" + str(learning_rate) + "learnrate.pdf"
 
     h1, ax = final_decision_plot(df, figureName)
 
