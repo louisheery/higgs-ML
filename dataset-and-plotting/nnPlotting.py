@@ -520,7 +520,10 @@ def sensitivity_NN(df):
 
     # Sqrt operations and error equation balancing.
     sens = math.sqrt(sens_sq)
-    error = 0.5 * math.sqrt(error_sq/sens_sq)
+    if sens_sq == 0:
+        error = 0
+    else:
+        error = 0.5 * math.sqrt(error_sq/sens_sq)
 
     return sens, error
 

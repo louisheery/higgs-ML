@@ -53,7 +53,7 @@ for nJets in [2,3]:
     yOdd = dfOdd['Class'].to_numpy()
     wOdd = dfOdd['training_weight'].to_numpy()
 
-    # Define architecture
+    # Define Architecture
     def DNNClassifier():
 
         model = Sequential()
@@ -66,7 +66,7 @@ for nJets in [2,3]:
         model.compile(loss='binary_crossentropy', optimizer='SGD', metrics=['accuracy'])
         return model
 
-    # Create and compile models
+    # Create and Compile models
     modelEven = DNNClassifier()
     modelOdd = DNNClassifier()
 
@@ -74,7 +74,7 @@ for nJets in [2,3]:
     epochs = 200
     batchSize = 100
 
-    # train
+    # Train Model
     modelEven.fit(xEven,yEven, sample_weight = wEven, epochs=epochs, batch_size=batchSize, verbose = 1)
     modelOdd.fit(xOdd,yOdd, sample_weight = wOdd, epochs=epochs, batch_size=batchSize, verbose = 1)
 
