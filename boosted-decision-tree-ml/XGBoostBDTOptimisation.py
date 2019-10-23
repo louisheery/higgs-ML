@@ -2,22 +2,17 @@
 # Author: Louis Heery
 
 # How to Use:
-# 1. [LINE 58] Replace 'hyperparameterOne = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
-# 2. [LINE 59] Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
-# 3. [LINE 84-87] Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
-# 4. [LINE 91-94] Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
+# 1. Replace 'hyperparameterOne = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
+# 2. Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: max_depth, n_estimators, learning_rate, subSample
+# 3. Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
+# 4. Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
 
-import pandas
-import numpy
 import sys
 sys.path.append("../")
 sys.path.append("../dataset-and-plotting")
-import pickle
 import time
 import threading
 
-import matplotlib.cm as cm
-from sklearn.preprocessing import scale
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -26,9 +21,6 @@ import numpy as np
 from bdtPlotting import *
 from sensitivity import * # sensitivity.py file, which has "calc_sensitivity_with_error" Function in it
 from xgboost import XGBClassifier
-from IPython.display import display
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
-from sklearn.tree import DecisionTreeClassifier
 
 
 def totalSensitivity(A,B,errorA,errorB):

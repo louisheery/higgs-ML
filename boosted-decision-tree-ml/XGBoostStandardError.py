@@ -1,31 +1,18 @@
 # XGBoost Boosted Decision Tree Classifier: Calculate Standard Error of Model
 # Author: Louis Heery
 
-import pandas
-import numpy
 import sys
 sys.path.append("../")
 sys.path.append("../dataset-and-plotting")
-import pickle
-
-import matplotlib.cm as cm
-from sklearn.preprocessing import scale
 
 from bdtPlotting import *
 from sensitivity import *
 from xgboost import XGBClassifier
-from IPython.display import display
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.tree import DecisionTreeClassifier
 import time
 import threading
 import matplotlib.pyplot as plt
-import csv
 import numpy as np
 import pandas as pd
-import matplotlib.mlab as mlab
 from scipy import stats
 
 

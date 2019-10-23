@@ -1,29 +1,18 @@
 # XGBoost Boosted Decision Tree Classifier Input Variable Optimisation
 # Author: Louis Heery
 
-import pandas
-import numpy
 import sys
 sys.path.append("../")
 sys.path.append("../dataset-and-plotting")
-import pickle
 
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import scale
 
 from bdtPlotting import *
 from sensitivity import *
 from xgboost import XGBClassifier
-from IPython.display import display
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
 import time
-import threading
 import pandas as pd
 import numpy as np
-from collections import Counter
 
 
 def totalSensitivity(A,B,errorA,errorB):

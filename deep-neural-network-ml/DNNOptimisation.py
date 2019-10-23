@@ -2,22 +2,19 @@
 # Author: Louis Heery
 
 # How to Use:
-# 1. [LINE 50] Replace 'hyperparameterOne = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
-# 2. [LINE 51] Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
-# 3. [LINE 106, 113, 121, 122] Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
-
-import pandas as pd
-from copy import deepcopy
-from sklearn.preprocessing import scale
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.models import model_from_yaml
-from keras.layers import Input, Dense, Dropout, Flatten
-from keras import backend as K
-from time import time
-import seaborn as sns
+# 1. Replace 'hyperparameterOne = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
+# 2. Replace 'hyperparameterTwo = ' with the desired Hyperparameter from: maxDepth, nEstimators, learningRate, subSample
+# 3. Assign hyperparameterOneValue & hyperparameterTwoValue to their correct hyperparameter, and set the other two hyperparameters to their default value.
 
 import sys
+from time import time
+
+import pandas as pd
+import seaborn as sns
+from keras.layers import Dense
+from keras.models import Sequential
+from sklearn.preprocessing import scale
+
 sys.path.append("../dataset-and-plotting")
 from nnPlotting import *
 
@@ -42,7 +39,7 @@ def convertForMatrix(dataStorage, xVariableLength, yVariableLength):
 
     return convertedDataset
 
-epochNumber = [10,20,30,40,50,75,100,200,400,600,800,1000]
+epochNumber = [10,20,30,40,50,75,100,200]#,400,600,800,1000]
 batchSize = [50,100,200,500,1000]
 optimiserAlgorithm = "SGD" # ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam", optimizers.SGD(lr=0.001, momentum=0.5, decay=0.00001)]
 numberOfHiddenLayers = 2 # [1,2,3,4,5,6,7,8,9,10]

@@ -1,24 +1,14 @@
 # Random Forest Classifier
 # Author: Louis Heery
 
-import pandas
-import numpy
 import sys
 sys.path.append("../")
 sys.path.append("../dataset-and-plotting")
-import pickle
-
-import matplotlib.cm as cm
-from sklearn.preprocessing import scale
 
 from bdtPlotting import *
 from sensitivity import *
-from xgboost import XGBClassifier
-from IPython.display import display
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 import time
-import threading
 
 
 def totalSensitivity(A,B,errorA,errorB):

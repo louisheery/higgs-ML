@@ -1,18 +1,15 @@
 # Deep Neural Network Classifer: Calculate Standard Error of Model
 # Author: Louis Heery
 
-import pandas as pd
-from copy import deepcopy
-from sklearn.preprocessing import scale
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.models import model_from_yaml
-from keras.layers import Input, Dense, Dropout, Flatten
-from keras import backend as K
-from time import time
-from scipy import stats
-
 import sys
+from time import time
+
+import pandas as pd
+from keras.layers import Dense
+from keras.models import Sequential
+from scipy import stats
+from sklearn.preprocessing import scale
+
 sys.path.append("../dataset-and-plotting")
 from nnPlotting import *
 

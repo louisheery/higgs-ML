@@ -1,14 +1,9 @@
 # Input Variables Correlation Matrices Plotter
 # Author: Louis Heery
 
-import csv
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from collections import Counter
 import seaborn as sns
-import pandas as pd
-import time
 
 categories = ["VH", "diboson", "ttbar_mc_a", "stop", "V+jets"]
 
