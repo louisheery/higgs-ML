@@ -106,7 +106,7 @@ for hyperparameterOneValue in hyperparameterOne:
                     hL = hL + 1
 
                 # output layer
-                model.add(Dense(1,activation='relu'))
+                model.add(Dense(1,activation='sigmoid'))
                 model.compile(loss='binary_crossentropy', optimizer=optimiserAlgorithm, metrics=['accuracy'])
                 return model
 
