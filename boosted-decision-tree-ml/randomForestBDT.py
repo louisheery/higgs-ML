@@ -11,8 +11,8 @@ import pickle
 import matplotlib.cm as cm
 from sklearn.preprocessing import scale
 
-from ../bdtPlotting import *
-from ../sensitivity import *
+from bdtPlotting import *
+from sensitivity import *
 from xgboost import XGBClassifier
 from IPython.display import display
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier

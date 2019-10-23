@@ -23,8 +23,8 @@ import seaborn as sns
 import pandas as pd
 import numpy as np
 
-from ../bdtPlotting import *
-from ../sensitivity import * # sensitivity.py file, which has "calc_sensitivity_with_error" Function in it
+from bdtPlotting import *
+from sensitivity import * # sensitivity.py file, which has "calc_sensitivity_with_error" Function in it
 from xgboost import XGBClassifier
 from IPython.display import display
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
@@ -193,7 +193,7 @@ for i in graphs:
     ax.figure.axes[-1].yaxis.label.set_size(20)
 
     # Save heatmap figure to PDF
-    figureName = "XGBoost_" + str(hyperparameterOneName + "_vs_" + str(hyperparameterTwoName) + ".pdf"
+    figureName = "XGBoost_" + str(hyperparameterOneName) + "_vs_" + str(hyperparameterTwoName) + ".pdf"
     fig = plt.gcf()
     plt.savefig(figureName, dpi=100, bbox_inches='tight')
     plt.show()
