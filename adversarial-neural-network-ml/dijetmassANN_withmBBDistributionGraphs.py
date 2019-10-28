@@ -51,7 +51,7 @@ for nJets in [2,3]:
 
     # Prepare data
     dfTrain = pd.read_csv('../dataset-and-plotting/CSV_withBinnedDijetMassValues/ADV_' + str(nJets) + 'jet_batch_odd.csv', index_col=0)
-    dfTrainAdversary = dfTrain # dfTrain.loc[dfTrain['Class'] == 0]
+    dfTrainAdversary = dfTrain#.loc[dfTrain['Class'] == 0]
     dfTrainAdversary = dfTrainAdversary.reset_index()
     dfTest = pd.read_csv('../dataset-and-plotting/CSV_withBinnedDijetMassValues/ADV_' + str(nJets) + 'jet_batch_even.csv', index_col=0)
 
@@ -62,7 +62,7 @@ for nJets in [2,3]:
     # Classifier Neural Network Architecture
     inputs = Input(shape=(dfTrain[variables].shape[1],))
     classifierLayer = Dense(40, activation="linear")(inputs)
-    classifierLayer = Dense(40, activation="tanh")(classifierLayer)
+    #classifierLayer = Dense(40, activation="tanh")(classifierLayer)
     classifierLayer = Dense(40, activation="tanh")(classifierLayer)
     classifierLayer = Dense(1, activation="sigmoid", name='classifier_output')(classifierLayer)
     classifierNN = Model(input=[inputs], output=[classifierLayer])
@@ -89,7 +89,7 @@ for nJets in [2,3]:
         df['decision_value'] = ((predictionScores-0.5)*2)
 
         print ("Iteration Number ROW = " + str(row))
-        figureName = "mBB_ANN_" + str(nJets) + "Jets"+ ".pdf"
+        figureName = "mBB_ANN_" + str(nJets) + "Jet_" + str(row) + ".pdf"
         nn_output_plot(df, figureName)
 
         # Calculate Sensitivity & Save to Dataframe
@@ -114,18 +114,20 @@ for nJets in [2,3]:
 
         SavedBackgroundData2 = (dfNEW.loc[dfNEW['Class'] == 0])['mBB_raw'].values #you can also use dfNEW['column_name']
 
-        plt.hist([savedSignalData,SavedBackgroundData2], 400,  label=['VH Signal', 'tt-bar Background'], stacked=True, alpha=0.75)
+        plt.hist(savedSignalData, 100,  label='VH Signal', alpha=0.75)
+        plt.hist(SavedBackgroundData2, 100,  label='Background', alpha=0.75)
 
         plt.xlabel("mBB, MeV")
         plt.xlim(0,700000)
         plt.xticks(rotation=45)
+        plt.yscale('log', nonposy='clip')
         plt.ylabel('Events')
         plt.legend()
         plt.title('mBB Signal & Background - in Low NN_output (-1.0 to +0.8) Region')
         plt.grid(True)
 
         # save figure
-        figureName = "mBB_ANN_SignalVsBackgroundLowRegion_" + str(nJets) + "Jet_.pdf"
+        figureName = "mBB_ANN_SignalVsBackgroundLowRegion_" + str(nJets) + "Jet_" + str(row) + ".pdf"
         fig = plt.gcf()
         plt.savefig(figureName, dpi=100, bbox_inches='tight')
         plt.show()
@@ -139,18 +141,20 @@ for nJets in [2,3]:
 
         SavedBackgroundData2 = (dfNEW.loc[dfNEW['Class'] == 0])['mBB_raw'] #you can also use dfNEW['column_name']
 
-        plt.hist([savedSignalData, SavedBackgroundData2], 50,  label=['VH Signal', 'tt-bar Background'], stacked=True, alpha=0.75)
+        plt.hist(savedSignalData, 100,  label='VH Signal', alpha=0.75)
+        plt.hist(SavedBackgroundData2, 100,  label='tt-bar Background', alpha=0.75)
 
         plt.xlabel("mBB, MeV")
-        plt.xlim(0,250000)
+        plt.xlim(0,350000)
         plt.xticks(rotation=45)
+        plt.yscale('log', nonposy='clip')
         plt.ylabel('Events')
         plt.legend()
         plt.title('mBB Signal & Background - in High NN_output (+0.8 to +1.0) Region')
         plt.grid(True)
 
         # save figure
-        figureName = "mBB_ANN_SignalVsBackgroundHighRegion_" + str(nJets) + "Jet_.pdf"
+        figureName = "mBB_ANN_SignalVsBackgroundHighRegion_" + str(nJets) + "Jet_" + str(row) + ".pdf"
         fig = plt.gcf()
         plt.savefig(figureName, dpi=100, bbox_inches='tight')
         plt.show()
@@ -165,21 +169,22 @@ for nJets in [2,3]:
 
         dfNEW = dfSorted_minus1plus08
         savedSignalData = (dfNEW.loc[dfNEW['Class'] == 1])['mBB_raw'] #you can also use dfNEW['column_name']
-        plt.hist([savedSignalData], 400,  label="(-1.0 to +0.8) of $NN_{output}$", stacked=True, alpha=0.75)
+        plt.hist(savedSignalData, 100,  label="(-1.0 to +0.8) of $NN_{output}$", alpha=0.75)
 
         dfNEW2 = dfSorted_plus08plus1
         savedSignalData = (dfNEW2.loc[dfNEW2['Class'] == 1])['mBB_raw'] #you can also use dfNEW['column_name']
-        plt.hist([savedSignalData], 50,  label="(+0.8 to +1.0) of $NN_{output}$", stacked=True, alpha=0.75)
+        plt.hist(savedSignalData, 100,  label="(+0.8 to +1.0) of $NN_{output}$", alpha=0.75)
 
         plt.xlabel("mBB, MeV")
-        plt.xlim(0,250000)
+        plt.xlim(0,350000)
         plt.xticks(rotation=45)
+        plt.yscale('log', nonposy='clip')
         plt.ylabel('Events')
         plt.legend()
         plt.title('mBB Signal - in Low & High NN_output Regions')
 
         # save figure
-        figureName = "mBB_ANN_SignalLowVsHighRegion_" + str(nJets) + "Jet_.pdf"
+        figureName = "mBB_ANN_SignalLowVsHighRegion_" + str(nJets) + "Jet_" + str(row) + ".pdf"
         fig = plt.gcf()
         plt.savefig(figureName, dpi=100, bbox_inches='tight')
         plt.show()
@@ -248,7 +253,7 @@ for nJets in [2,3]:
     timeTaken = time.time() - start
 
     df = pd.DataFrame(dataStorage)
-    nameoffile = "mbb_ANN_" + str(nJets) + "jet.csv"
+    nameoffile = "mbb_ANN_" + str(nJets) + "Jet_.pdf"
     df.to_csv(nameoffile)
 
 sensitivityCombined = totalSensitivity(sensitivity2Jet[0],sensitivity3Jet[0],sensitivity2Jet[1],sensitivity3Jet[1])

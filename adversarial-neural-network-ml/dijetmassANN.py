@@ -51,7 +51,7 @@ for nJets in [2,3]:
 
     # Prepare data
     dfTrain = pd.read_csv('../dataset-and-plotting/CSV_withBinnedDijetMassValues/ADV_' + str(nJets) + 'jet_batch_odd.csv', index_col=0)
-    dfTrainAdversary = dfTrain.loc[dfTrain['Class'] == 0]
+    dfTrainAdversary = dfTrain#.loc[dfTrain['Class'] == 0]
     dfTrainAdversary = dfTrainAdversary.reset_index()
     dfTest = pd.read_csv('../dataset-and-plotting/CSV_withBinnedDijetMassValues/ADV_' + str(nJets) + 'jet_batch_even.csv', index_col=0)
 
@@ -62,7 +62,7 @@ for nJets in [2,3]:
     # Classifier Neural Network Architecture
     inputs = Input(shape=(dfTrain[variables].shape[1],))
     classifierLayer = Dense(40, activation="linear")(inputs)
-    classifierLayer = Dense(40, activation="tanh")(classifierLayer)
+    #classifierLayer = Dense(40, activation="tanh")(classifierLayer)
     classifierLayer = Dense(40, activation="tanh")(classifierLayer)
     classifierLayer = Dense(1, activation="sigmoid", name='classifier_output')(classifierLayer)
     classifierNN = Model(input=[inputs], output=[classifierLayer])
@@ -80,7 +80,7 @@ for nJets in [2,3]:
     optimiserClassifier = SGD(lr=0.001, momentum=0.5, decay=0.00001)
     classifierNN.trainable = True; adversaryNN.trainable = False
     classifierNN.compile(loss='binary_crossentropy', optimizer=optimiserClassifier, metrics=['binary_accuracy'])
-    classifierNN.fit(dfTrain[variables], dfTrain['Class'], sample_weight=dfTrain['training_weight'], epochs=1, batch_size=32)
+    classifierNN.fit(dfTrain[variables], dfTrain['Class'], sample_weight=dfTrain['training_weight'], epochs=30, batch_size=32)
 
 
     # Function which tests performance of classifier
@@ -126,7 +126,7 @@ for nJets in [2,3]:
         plt.grid(True)
 
         # save figure
-        figureName = "mBB_ANN_SignalLowVsHighRegion_" + str(nJets) + "Jet_.pdf"
+        figureName = "mBB_ANN_SignalLowVsHighRegion_" + str(nJets) + "Jet_" + str(row) + ".pdf"
         fig = plt.gcf()
         plt.savefig(figureName, dpi=100, bbox_inches='tight')
         plt.show()
@@ -145,7 +145,7 @@ for nJets in [2,3]:
     optimiserClassOnAdv = SGD(lr=1, momentum=0.5, decay=0.00001)
     classifierNN.trainable = False; adversaryNN.trainable = True
     classOnAdvNN.compile(loss='categorical_crossentropy', optimizer=optimiserClassOnAdv, metrics=['accuracy'])
-    classOnAdvNN.fit(dfTrainAdversary[variables], zTrainAdversary, sample_weight=dfTrainAdversary['adversary_weights'],batch_size=128, epochs=1)
+    classOnAdvNN.fit(dfTrainAdversary[variables], zTrainAdversary, sample_weight=dfTrainAdversary['adversary_weights'],batch_size=128, epochs=30)
 
     # Construct Model with Combined Loss Function of Adversary & Classifier
     optimiserCombinedSystem = SGD(lr=0.001, momentum=0.5, decay=0.00001)
