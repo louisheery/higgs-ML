@@ -39,8 +39,8 @@ def convertForMatrix(dataStorage, xVariableLength, yVariableLength):
 
     return convertedDataset
 
-epochNumber = [10,20,30,40,50,75,100,200]#,400,600,800,1000]
-batchSize = [50,100,200,500,1000]
+epochNumber = [200]#[10,20,30,40,50,75,100,200]#,400,600,800,1000]
+batchSize = [100]#[50,100,200,500,1000]
 optimiserAlgorithm = "SGD" # ["SGD", "RMSprop", "Adagrad", "Adadelta", "Adam", "Adamax", "Nadam", optimizers.SGD(lr=0.001, momentum=0.5, decay=0.00001)]
 numberOfHiddenLayers = 2 # [1,2,3,4,5,6,7,8,9,10]
 
@@ -97,12 +97,12 @@ for hyperparameterOneValue in hyperparameterOne:
                 model = Sequential()
 
                 model.add(Dense(units=14, input_shape=(xEven.shape[1],), activation='relu')) # input layer
-                hL = 1 # Total Number of hidden layers
+                hL = 0 # Total Number of hidden layers
 
                 # add hidden layers
                 while hL < numberOfHiddenLayers:
                     model.add(Dense(14, init='uniform', activation='relu'))
-                    print("1 Extra Hidden Layer Added")
+                    #print("1 Extra Hidden Layer Added")
                     hL = hL + 1
 
                 # output layer
