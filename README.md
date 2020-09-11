@@ -1,7 +1,7 @@
 # Higgs ML (Higgs boson Machine Learning Classifiers)
 
 [![Build Status](https://img.shields.io/badge/build-v1.0-brightgreen)](https://github.com/louisheery/higgs-ML)
-[![Build Status](https://img.shields.io/badge/build_status-published-brightgreen)](https://github.com/louisheery/plug-and-play-ML)
+[![Build Status](https://img.shields.io/badge/build_status-published-brightgreen)](https://github.com/louisheery/higgs-ML)
 
 Supervised Machine Learning techniques used to categorise VH, H(bb) Higgs boson decay events using data collected from the Large Hadron Collider, CERN.
 
